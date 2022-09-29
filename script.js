@@ -27,13 +27,17 @@ function newQuote() {
 
 // Get quotes from API
 async function getQuotes() {
-    const apiUrl = 'https://jacintodesign.github.io/quotes-api/data/quotes.json';
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
+    const apiUrl = 'http://api.forismatic.com/api/1.0/?method=getQuotes&lang=en&format=json';
     try {
-        const response = await fetch(apiUrl);
-        apiQuotes = response.json();
+        const response = await fetch(proxyUrl + apiUrl);
+        const data = await response.json();
+        authorText.innerText = data.quoteAuthor;
+        quoteText.innerText = data.quoteText;
         newQuote();
     } catch (error) {
-        // Catch Error here
+        getQuotes();
+        console.log('whoops, no quote', error);
     }
 }
 
